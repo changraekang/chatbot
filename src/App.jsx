@@ -60,7 +60,7 @@ export default function App() {
     <div className="shell auth-shell">
       <form className="auth-card" onSubmit={submit}>
         <h1>RAG Chat</h1>
-        <p className="muted">env 계정 로그인 · S3 첨부 · Qdrant RAG</p>
+        <p className="muted">네이버 웍스 스타일 · 문서 기반 Q&A</p>
 
         <label>
           아이디
