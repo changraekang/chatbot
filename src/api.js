@@ -1,4 +1,7 @@
 const TOKEN_KEY = "rag_token";
+const API_BASE =
+  import.meta.env.VITE_API_BASE?.replace(/\/$/, "") ||
+  "https://api.sparkling-rae.com";
 
 export function getToken() {
   return localStorage.getItem(TOKEN_KEY);
@@ -18,7 +21,7 @@ async function request(path, { method = "GET", body, token, formData } = {}) {
   if (auth) headers.Authorization = `Bearer ${auth}`;
   if (body && !formData) headers["Content-Type"] = "application/json";
 
-  const res = await fetch(`/rag${path}`, {
+  const res = await fetch(`${API_BASE}/rag${path}`, {
     method,
     headers,
     body: formData || (body ? JSON.stringify(body) : undefined),
@@ -55,11 +58,13 @@ export const api = {
     fd.append("file", file);
     return request("/documents", { method: "POST", formData: fd });
   },
+  deleteDocument: (id) =>
+    request(`/documents/${id}`, { method: "DELETE" }),
 };
 
 /** POST /rag/chat → SSE 이벤트 콜백 */
 export async function streamChat({ roomId, message, onEvent, signal }) {
-  const res = await fetch("/rag/chat", {
+  const res = await fetch(`${API_BASE}/rag/chat`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${getToken()}`,

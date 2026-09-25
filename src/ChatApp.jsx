@@ -109,6 +109,16 @@ export default function ChatApp({ user, onLogout }) {
     }
   }
 
+  async function onDeleteDoc(id) {
+    if (!window.confirm("이 파일을 삭제할까요? (S3·검색 인덱스 포함)")) return;
+    try {
+      await api.deleteDocument(id);
+      await loadDocs();
+    } catch (err) {
+      setError(err.message);
+    }
+  }
+
   async function send(e) {
     e?.preventDefault?.();
     const text = input.trim();
@@ -210,6 +220,14 @@ export default function ChatApp({ user, onLogout }) {
                 <span className="file-meta">
                   {d.indexed ? `${d.chunkCount}청크` : "미인덱싱"}
                 </span>
+                <button
+                  type="button"
+                  className="file-del"
+                  title="삭제"
+                  onClick={() => onDeleteDoc(d.id)}
+                >
+                  ×
+                </button>
               </li>
             ))}
           </ul>

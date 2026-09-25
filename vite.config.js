@@ -7,7 +7,8 @@ export default defineConfig({
     port: 5173,
     proxy: {
       "/rag": {
-        target: "http://localhost:4000",
+        target: "https://api.sparkling-rae.com",
+        secure: true,
         changeOrigin: true,
       },
     },
